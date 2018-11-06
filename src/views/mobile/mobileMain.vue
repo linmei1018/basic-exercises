@@ -18,7 +18,7 @@
     </div>
     <div class="m-main-footer">
       <Row class="m-menu">
-        <i-col span="11" v-for="item in mMenuList.children">
+        <i-col span="11" v-for="item in mMenuList.children" :key="item.name">
           <div class="list"
           :class="item.name=== mActiveName?'active':''" @click="clickMenu(item.name)">
             <Icon size="24"  :type="item.icon"></Icon>

@@ -1,42 +1,6 @@
 <template>
-  <div class="apple">
-    <div class="super-user-nav">
-      <h3>第一个弹窗</h3>
-      <div class="add-btn" @click="closeModal">
-        <Icon size="20" type="md-close" />
-      </div>
-    </div>
-    <div style="text-align:center;">
-      <Row type="flex" justify="center" align="top">
-        <i-col span="20">
-          <Form ref="formCustom" :model="formCustom" :label-width="80">
-            <FormItem label="Password" prop="passwd">
-              <i-input type="password" v-model="formCustom.passwd"></i-input>
-            </FormItem>
-            <FormItem label="Confirm" prop="passwdCheck">
-              <i-input type="password" v-model="formCustom.passwdCheck"></i-input>
-            </FormItem>
-            <FormItem label="Age" prop="age">
-              <i-input type="text" v-model="formCustom.age" number></i-input>
-            </FormItem>
-            <FormItem>
-              <Button type="primary" @click="modal2=true">跳转</Button>
-            </FormItem>
-          </Form>
-        </i-col>
-      </Row>
-    </div>
-    <Modal v-model="modal2" title="第二个弹窗" width="1000" class-name="vertical-center-modal" @on-cancel="modal2=false">
-      <Row type="flex" justify="center" align="top">
-        <i-col span="20">
-          <p>内容</p>
-        </i-col>
-      </Row>
-      <div class="footer" slot="footer" style="text-align: center">
-        <i-button type="primary" @click="modal2=false" >取消</i-button>
-        <i-button type="primary" @click="save" >保存</i-button>
-      </div>
-    </Modal>
+  <div id="apple"  ref="wrapper">
+      <img src="../../images/QR-code.png">
   </div>
 </template>
 
@@ -45,22 +9,30 @@
     name: 'apple',
     data(){
       return{
-        modal2:false,
-        formCustom:{
-          passwd: '',
-          passwdCheck: '',
-          age: ''
-        },
       }
     },
-    methods:{
-      //保存
-      save(){
-
-      },
-      //关闭弹窗
-      closeModal(){
-        this.$router.push({ name: 'HelloWorld' });
+    mounted() {
+      this.listenMouseEvent();
+    },
+    methods: {
+      listenMouseEvent() {
+        let dom = this.$refs.wrapper;
+        let deepParam = 20;
+        dom.onmouseover = ev => {
+          //鼠标移动时
+          dom.onmousemove = ev => {
+            // 当前鼠标距离左侧的距离 - dom距离左侧的距离 - dom宽度的一半
+            // 当前鼠标距离顶部的距离 - dom距离顶部的距离 - dom高度的一半
+            let X = ev.clientX - dom.offsetLeft - dom.offsetWidth / 2;
+            let Y = ev.clientY - dom.offsetTop - dom.offsetHeight / 2;
+            this.$refs.wrapper.style.transform = `perspective(1000px) rotateY(${X / deepParam}deg) rotateX(${-Y / deepParam}deg)`;
+          };
+        };
+        dom.onmouseout = ev => {
+          dom.onmousemove = null;
+          // 鼠标移动到边界时，容易造成抖动，所以，加了延时
+          setTimeout( "document.getElementById('apple').style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`",200)
+        };
       }
     }
   };
@@ -68,29 +40,17 @@
 </script>
 
 <style lang="less">
-.apple{
-  padding:20px;
-  width:600px;
-  .super-user-nav{
-    height:40px;
-    line-height:40px;
-    margin-bottom:20px;
-    h3{
-      float:left;
-    }
-    .add-btn{
-      float:right;
-      cursor:pointer;
+  #apple {
+    width: 300px;
+    margin: 50px auto;
+    background: #fff;
+    box-shadow: 4px 4px 15px #aaa;
+    /*父元素设为3d*/
+    transform-style: preserve-3d;
+    /*设置父元素得景深*/
+    transform: perspective(1000px);
+    img {
+      width:100%;
     }
   }
-}
-.vertical-center-modal{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .ivu-modal{
-    top: 0;
-  }
-}
 </style>

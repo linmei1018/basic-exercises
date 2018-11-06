@@ -66,9 +66,9 @@
         </Layout>
       </Layout>
     </Layout>
-    <div class="main-container">
-      <p class="ceshi">全局样式</p>
-    </div>
+    <!--<div class="main-container">-->
+      <!--<p class="ceshi">全局样式</p>-->
+    <!--</div>-->
   </div>
 </template>
 
